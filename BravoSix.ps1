@@ -217,6 +217,7 @@ function BravoSix {
     }
     
     # Disabling defender drivers
+    Write-Host
     Write-Host "[+] Disable drivers" -ForegroundColor Green
     Write-Host
     $drv_list = @("WdnisDrv", "wdfilter", "wdboot")
