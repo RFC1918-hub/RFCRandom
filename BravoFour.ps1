@@ -183,7 +183,7 @@ function BravoFour {
     # Disabling defender services
     Write-Host "[+] Disable services" -ForegroundColor Green
     Write-Host
-    $svc_list = @("WdNisSvc", "WinDefend", "Sense")
+    $svc_list = @("WinDefend")
     foreach ($svc in $svc_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
             Write-Host "[i] Disabling $svc" -ForegroundColor DarkRed
@@ -195,7 +195,7 @@ function BravoFour {
     # Disabling defender drivers
     Write-Host "[+] Disable drivers" -ForegroundColor Green
     Write-Host
-    $drv_list = @("WdnisDrv", "wdfilter", "wdboot")
+    $drv_list = @("WdnisDrv")
     foreach ($drv in $drv_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
             Write-Host "[i] Disabling $drv" -ForegroundColor DarkRed
