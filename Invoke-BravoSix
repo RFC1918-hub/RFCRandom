@@ -86,8 +86,8 @@ function BravoCleanup() {
 
     # cleaning up downloadables
     $downloadDirectory = "C:\Windows\Temp"
-    Remove-Item -Path $downloadDirectory\phant0m-exe.exe -Force
-    Remove-Item -Path $downloadDirectory\Backstab.exe -Force
+    Remove-Item -Path $downloadDirectory\phant0m-exe.exe -Force | Out-Null
+    Remove-Item -Path $downloadDirectory\Backstab.exe -Force | Out-Null
     Remove-MpPreference -ExclusionPath "C:\Windows\Temp"
 }
 
