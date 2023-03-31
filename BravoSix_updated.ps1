@@ -16,7 +16,7 @@ function BravoSix {
     }
 
     Write-Host "Waiting for $trustedInstallerService to start..."
-    Write-Host "TrustedInstaller is running {}".format($(Get-Process $serviceName).Id)
+    Write-Host "TrustedInstaller is running " + $(Get-Process $serviceName).Id
 
     $serviceProcessId = $(Get-Process $trustedInstallerService).Id
     $powershellPath = "C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe"
@@ -68,5 +68,3 @@ function Main {
     GoingDark
     BravoSix
 }
-
-Main
