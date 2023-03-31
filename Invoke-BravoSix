@@ -93,3 +93,5 @@ function TrustedInstaller() {
 
     [System.Reflection.Assembly]::Load([Convert]::FromBase64String($trustedInstaller)) | Out-Null
 }
+
+Invoke-BravoSix
