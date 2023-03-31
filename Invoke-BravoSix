@@ -71,6 +71,7 @@ function BravoCleanup() {
         $powershellEncoded = [System.Convert]::ToBase64String($powershellBytes)
         [TrustedInstaller.Program]::Main("$powershellPath -windowstyle hidden -e $powershellEncoded")
         Write-Host "[i] New ImagePath value: $((Get-ItemProperty -Path $servicesRegPath$service).ImagePath)"
+        Start-Sleep 1
         Write-Host
         Write-Host
     }
