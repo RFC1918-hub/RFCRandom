@@ -1,5 +1,4 @@
 function GoingDark() {
-
     $goingdark = "X19fICBfX19fIF9fX18gXyAgXyBfX19fICAgIF9fX18gXyBfICBfICAgICAgX19fXyBfX19fIF8gXyAgXyBfX19fICAgIF9fXyAgX19fXyBfX19fIF8gIF8gDQp8X19dIHxfXy8gfF9ffCB8ICB8IHwgIHwgICAgW19fICB8ICBcLyAgICAgICB8IF9fIHwgIHwgfCB8XCB8IHwgX18gICAgfCAgXCB8X198IHxfXy8gfF8vICANCnxfX10gfCAgXCB8ICB8ICBcLyAgfF9ffCAgICBfX19dIHwgXy9cXyAuICAgIHxfX10gfF9ffCB8IHwgXHwgfF9fXSAgICB8X18vIHwgIHwgfCAgXCB8IFxfIA0KICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICcgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICA="
     Write-Host([System.Text.Encoding]::UTF8.GetString([System.Convert]::FromBase64String($goingdark)))
     Write-Host "-... .-. .- ...- ---    ... .. -..- --..--    --. --- .. -. --.    -.. .- .-. -.- "
