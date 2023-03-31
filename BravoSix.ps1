@@ -205,7 +205,7 @@ function BravoSix {
     foreach ($svc in $svc_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$svc")) {
             Write-Host "[i] Disabling $svc" -ForegroundColor DarkRed
-            $powershellArg = "-c Rename-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$svc"" -Name BravoSixImagePath -NewName 'ImagePath'"
+            $powershellArg = "-c Rename-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$svc"" -Name ImagePath -NewName 'BravoSixImagePath'; Start-Sleep -Seconds 5"
             [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
         }
     }
@@ -217,7 +217,7 @@ function BravoSix {
     foreach ($drv in $drv_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
             Write-Host "[i] Disabling $drv" -ForegroundColor DarkRed
-            $powershellArg = "-c Rename-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name BravoSixImagePath -NewName 'ImagePath'"
+            $powershellArg = "-c Rename-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name ImagePath -NewName 'BravoSixImagePath'"
             [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
         }
     }
