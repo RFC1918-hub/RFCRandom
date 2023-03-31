@@ -217,7 +217,7 @@ function BravoSix {
     foreach ($drv in $drv_list) {
         if ($(Test-Path "HKLM:\SYSTEM\CurrentControlSet\Services\$drv")) {
             Write-Host "[i] Disabling $drv" -ForegroundColor DarkRed
-            $powershellArg = "-c Rename-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name ImagePath -NewName 'BravoSixImagePath'"
+            $powershellArg = "-c Rename-ItemProperty -Path ""HKLM:\SYSTEM\CurrentControlSet\Services\$drv"" -Name ImagePath -NewName 'BravoSixImagePath'; read-host 'Press ENTER to continue...'"
             [GetTrustedInstaller.spawnPPID]::Run($serviceProcessId, $powershellPath, $powershellArg)
         }
     }
