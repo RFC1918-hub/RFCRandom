@@ -38,24 +38,8 @@ function IsElevated() {
     $windowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-if (-not ($remoteProc -eq '')) {
-    if (-not (IsElevated)) {
-        Write-Warning '[!] You are not running this script as an administrator.'
-    } else {
-        Write-Host '[*] You are running this script as an administrator.'
-    }
-    Write-Host '[i] Injecting into process: ' $remoteProc
-} else {
-    if (-not (IsElevated)) {
-        Write-Warning '[!] You are not running this script as an administrator.'
-        $remoteProc = 'explorer'
-        Write-Host '[i] Injecting into process: ' $remoteProc
-    } else {
-        Write-Host '[*] You are running this script as an administrator.'
-        $remoteProc = 'spoolsv'
-        Write-Host '[i] Injecting into process: ' $remoteProc
-    }
-}
+$remoteProc = 'explorer'
+
 # try to get process id of remote process
 try {
     $remoteProcId = (Get-Process -Name $remoteProc).Id[0]
